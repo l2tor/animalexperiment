@@ -33,9 +33,10 @@ In the random condition, all six concepts are presented five times randomly (30 
 Finally, you can open controlpanel/index.html to start the experiment. If you want to run this control panel from a different machine than the companion tablet game and other modules, make sure to include robotip.js (in the root directory) so that it knows where to connect to.
 
 # Project structure #
-animalexperimentservice				Output management (speech and gesture production)
-interactionmanager					Interaction management (tracks progress through the experiment, decides what to do next)
-controlpanel						Web interface used to start the experiment
+| animalexperimentservice | Output management (speech and gesture production) |
+| interactionmanager | Interaction management (tracks progress through the experiment, decides what to do next) |
+| controlpanel | Web interface used to start the experiment |
+| tests | The pre and posttests used for the experiment (ran on a laptop) |
 
 # Making changes #
 In order to add your own concepts, the following steps are needed:
