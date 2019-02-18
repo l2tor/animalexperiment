@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <script src="libs/qimessaging/1.0/jquery.min.js"></script>
+    <!--<script src="libs/qimessaging/2/qimessaging.js"></script>-->
+    <script src="libs/qi/2/qi.js"></script>
+    <script src="../robotip.js"></script>
+
+    <script type="text/javascript">
+        var _session = null;
+
+        function start() {
+            sendRequest("start", $('#name_input').val());
+        }
+
+        function pause() {
+            sendRequest("pause", "");
+        }
+
+        function resume() {
+            sendRequest("resume", "");
+        }
+
+        function sendTTS() {
+            sendRequest("tts", $('#tts_input').val());
+        }
+
+        $(document).ready(function () {
+            // connect to Nao
+            function disconnected() {
+                console.log("disconnected");
+            }
+
+            QiSession(function (session) {
+                _session = session;
+                session.service("ALMemory").then(function (ALMemory) {
+                    ALMemory.subscriber('allow_answer').then(function (sub) {
+                        sub.signal.connect(function (result) {
+                            $('#answer').text(result);
+                        });
+                    });
+                });
+            }, disconnected, ROBOT_IP);
+        });
+    </script>
+    <!--<script src="jscript/utils.js"></script>-->
+    <script src="jscript/study_1.js"></script>
+</head>
+<body id="body">
+    <input type="text" id="name_input" /><br /><br />
+    <input type="button" id="btn_start" value="Start" onclick="start();" /><br /><br />
+    <input type="button" id="btn_pause" value="Pause" onclick="pause();" /><br />
+    <input type="button" id="btn_resume" value="Resume" onclick="resume();" /><br /><br /><br />
+    <b>Text for the robot to say:</b><br />
+    <input type="text" id="tts_input" /><br />
+    <input type="button" id="btn_send_tts" value="Say it!" onclick="sendTTS();" />
+</body>
+</html>

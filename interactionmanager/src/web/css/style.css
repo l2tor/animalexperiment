@@ -1,0 +1,145 @@
+body {
+    width:99%;
+    display:block;
+    background-image: url(../images/background_gui.png);
+    /*background-size: 1376px 768px;*/
+    /*background-size:cover;*/
+    background-repeat: no-repeat;
+    background-position:-10px 0px;
+    min-height:100%;
+    margin:0;
+    padding:0;
+    user-select: none;
+}
+
+::selection { background: transparent; } ::-moz-selection { background: transparent; }
+
+html {
+    height:100%;
+}
+
+#container, #validation {
+    width:73%;
+    margin: 0 auto;
+    /*padding-top:3%;*/
+    display:none;
+    height:77vh;
+}
+
+#left_col {
+    float:left;
+    width:40%;
+    height:77vh;
+    margin-left: 5%;
+}
+
+#right_col {
+    float:left;
+    width:40%;
+    height:77vh;
+    margin-left: 10%;
+}
+
+#div_0, #div_1, #div_2, #div_3 {
+    text-align:center;
+    /*padding:10px 10px 10px 10px;*/
+    margin: 10% auto 0% auto;
+    margin-right:auto;
+    /*background: #ddd;*/
+    width:100%;
+    /*height:37%;*/
+    display:none;
+    vertical-align: middle;
+    position: relative;
+}
+
+#div_2, #div_3 {
+    margin-top: 10%;
+}
+
+.correct, .incorrect {
+    display: none; 
+    left: 55%; 
+    bottom: -5%; 
+    width: 50%;
+    position: absolute;
+}
+
+#text {
+    width:60%;
+    background-color:white;
+    height:5%;
+    font-size:36pt;
+    text-align:center;
+    margin: 2% auto -0.5% auto;
+
+}
+
+.div_active {
+    border: 10px solid white;
+    box-shadow: 0 0 25px rgba(0,0,0, .7);
+}
+
+.helper {
+    padding-top: 100%; /* forces 1:1 aspect ratio */
+}
+
+.image_container {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align:center; /* Align center inline elements */
+    font: 0/0 a;
+}
+
+.image_container:before {
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.animal_picture {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.img_small {
+    width:30%;
+}
+
+.img_medium {
+    width: 50%;
+}
+
+.img_big {
+    width: 70%;
+}
+
+.img_response {
+    width: 50%;
+    margin-top:20%;
+}
+
+.btn_menu_not_active {
+    width:20%;
+    height:100px;
+    margin: 2% 3% 0% 3%;
+    font-size:30px;
+}
+
+.btn_menu_active {
+    width:20%;
+    height:100px;
+    background-color: white;
+    margin: 2% 3% 0% 3%;
+    font-size:30px;
+}
+
+.touch_icon {
+    width:10%;
+    position:absolute;
+    right:5%;
+    top:75%;
+}

@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title></title>
+    <script src="libs/qimessaging/1.0/jquery.min.js"></script>
+    <!--<script src="libs/qimessaging/2/qimessaging.js"></script>-->
+    <script src="libs/qi/2/qi.js"></script>
+    <script src="../../../robotip.js"></script>
+
+    <script type="text/javascript">
+        // Disable right click (for tablet)
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('touchstart', function(e) {
+            if (e.targetTouches.length === 2) {
+                e.preventDefault();
+            }
+        }, {passive: false});
+
+        // send the touched object to the interaction-manager
+        function answer_button(event_name, value) {
+            activate_gui_buttons(false);
+            sendRequest(event_name, value);
+        }
+
+        function face_button(value) {
+
+            if (value) {
+                sendRequest("test_run", true);
+                $('#faces').hide();
+            }
+
+            else {
+                $('#sad_face').hide();
+                sendRequest("did_not_understand", "");
+            }
+        }
+
+        function start_button() {
+            $('#startbutton').hide();
+
+            sendRequest("start_button_clicked");
+        }
+
+        var _session = null;
+        var img_base_path = "images/";
+        var sizes = {'SMALL':'img_small', 'MEDIUM':'img_medium', 'BIG':'img_big'};
+        var start_time=null;
+        var end_time = null;
+        var buttons_active = false;
+        var last_button_clicked = null;
+
+        $(document).ready(function () {
+            function disconnected() {
+                console.log("disconnected");
+            }
+
+            QiSession(function (session) {
+                _session = session;
+                session.service("ALMemory").then(function (ALMemory) {
+
+                    // show the four images for the next task
+                    ALMemory.subscriber('set_images').then(function (sub) {
+                        sub.signal.connect(function (result) {
+                            console.log("=== SET IMAGES");
+                            console.log(result);
+                            var task_objects = JSON.parse(result);
+
+                            for (var i=0; i<4; i++) $("#div_" + i).css("display", "none");
+
+                            // set the new image paths
+                            for (var i=0; i<task_objects.length; ++i) {
+                                $("#img_" + i).attr("src", img_base_path + task_objects[i].id.toLowerCase() + ".png");
+                                //$("#img_" + i).attr("class", sizes[task_objects[i].size]);
+                                //$("#img_" + i).attr("onclick", "stopTTS();sleep(500).then(() => {sendRequest('answer','" + task_objects[i].id + "');})");
+                                $("#div_" + i).attr("ontouchstart", "sendAnswer('" + task_objects[i].id + "', this);");
+                                $("#div_" + i).css("display", "block")
+                            }
+                            // show body
+                            $('#validation').css("display", "none");
+                            $('#container').css("display", "none");
+                        });
+                    });
+
+                    ALMemory.subscriber('confetti').then(function(sub) {
+                        sub.signal.connect(function (result) { 
+                            window.location.replace("done.html");
+                        });
+                    });
+
+                    ALMemory.subscriber('show_images').then(function (sub) {
+                        sub.signal.connect(function (result) { 
+                            console.log("=== SHOW IMAGES");
+                            $('#div_0').css('opacity', '');
+                            $('#div_1').css('opacity', '');
+                            $('#div_2').css('opacity', '');
+                            $('#div_3').css('opacity', '');
+
+                            $(last_button_clicked).find( ".correct" ).css( "display", "none" );
+                            $(last_button_clicked).find( ".incorrect" ).css( "display", "none" );
+
+                            $('#container').css("display", "block"); 
+
+                            if (result == true) {
+                                buttons_active = true;
+                                console.log('=== setting start time ===');
+                                start_time = Date.now();
+                            }
+                        });
+                    });
+
+                    ALMemory.subscriber('activate_images').then(function (sub) {
+                        sub.signal.connect(function (result) { 
+                            buttons_active = true;
+                            console.log('=== setting start time ===');
+                            start_time = Date.now();
+                        });
+                    });
+
+                    // hide all images
+                    ALMemory.subscriber('hide_images').then(function (sub) {
+                        sub.signal.connect(function (result) { $('#container').css("display", "none"); });
+                    });
+
+                    // validation of answer
+                    ALMemory.subscriber('validation').then(function (sub) {
+                        sub.signal.connect(function (result) {
+                            console.log(result);
+
+                            var res = JSON.parse(result);
+                            $('#div_0').css('opacity', '0.2');
+                            $('#div_1').css('opacity', '0.2');
+                            $('#div_2').css('opacity', '0.2');
+                            $('#div_3').css('opacity', '0.2');
+
+                            $(last_button_clicked).css('opacity', '1.0');
+
+                            if (res["is_correct"] == "True") {
+
+                                $(last_button_clicked).find( ".correct" ).css( "display", "inline" );
+                            }
+                            else {
+                                $(last_button_clicked).find( ".incorrect" ).css( "display", "inline" );
+                            }
+                        });
+                    });
+
+                    ALMemory.subscriber('start_event').then(function (sub) {
+                        sub.signal.connect(function (result) { $('#container').css("display", "none"); });
+                    });                
+
+                    ALMemory.subscriber('activate_faces').then(function (sub) {
+                        sub.signal.connect(function (result) {
+                            if (result == "true") {
+                                $('#faces').show();
+                            }
+                            else {
+                                $('#faces').hide();
+                            }
+                        });
+                    });  
+
+                    ALMemory.subscriber('show_start_button').then(function(sub) {
+                        sub.signal.connect(function(result) {
+                            $('#container').css("display", "none");  
+                            $('#startbutton').show();
+                        });
+                    });            
+
+                    ALMemory.subscriber('allow_answer').then(function (sub) {
+                        sub.signal.connect(function (result) {
+                            $('#answer').text(result);
+                        });
+                    });
+
+                });
+            }, disconnected, ROBOT_IP);
+
+            // connect to Nao
+            /*session = new QiSession(ROBOT_IP);
+            session.service("ALMemory").done(function (ALMemory) {*/
+        });
+
+    </script>
+    <script src="jscript/utils.js"></script>
+    <script src="jscript/study_1.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body id="body" style="height: 100%; overflow-y: hidden">
+
+<div id="faces" style="display: none; width: 100%; text-align: center; height: 50%; margin-top: 12.5%">
+    <img src="images/happy_face.png" id="happy_face" style="height: 100%" ontouchstart="face_button(true);" />
+    <img src="images/sad_face.png" id="sad_face" style="height: 100%; margin-left: 10%" ontouchstart="face_button(false);" />
+</div>
+
+<div id="startbutton" style="display: none; width: 100%; text-align: center; height: 50%; margin-top: 12.5%">
+     <img src="images/happy_face.png" style="height: 100%" ontouchstart="start_button();" />
+</div>
+
+<div id="container">
+    <div id="left_col">
+        <div id="div_0" class="image_container">
+            <span class="helper"></span>
+            <img id="img_0" class="animal_picture" style="max-width: 100%; max-height: 100%" src="images\circle_blue.png" alt=""/>
+            <img class="correct" src="images/happy_face.png" />
+            <img class="incorrect" src="images/sad_face.png" />
+        </div>
+        <div id="div_2" class="image_container">
+            <span class="helper"></span>
+            <img id="img_2" class="animal_picture" style="max-width: 100%; max-height: 100%" src="images\circle_yellow.png" alt=""/>
+            <img class="correct" src="images/happy_face.png" />
+            <img class="incorrect" src="images/sad_face.png" />
+        </div>
+    </div>
+    <div id="right_col">
+        <div id="div_1" class="image_container">
+            <span class="helper"></span>
+            <img id="img_1" class="animal_picture" style="max-width: 100%; max-height: 100%" src="images\circle_red.png" alt=""/>
+            <img class="correct" src="images/happy_face.png" />
+            <img class="incorrect" src="images/sad_face.png" />
+        </div>
+        <div id="div_3" class="image_container">
+            <span class="helper"></span>
+            <img id="img_3" class="animal_picture" style="max-width: 100%; max-height: 100%" src="images\circle_green.png" alt=""/>
+            <img class="correct" src="images/happy_face.png" />
+            <img class="incorrect" src="images/sad_face.png" />
+        </div>
+    </div>
+</div>
+<div id="validation" style="display:none;text-align:center;">
+    <img id="img_cor" class="img_response" src="" alt=""/>
+</div>
+</body>
+</html>
