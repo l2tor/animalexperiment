@@ -28,6 +28,15 @@
             sendRequest("tts", $('#tts_input').val());
         }
 
+        function setColor(color_code, color_name) {
+            sendRequest("change_color", color_code);
+            sendRequest("color_picked", color_name);
+        }
+
+        function unknownColor() {
+            sendRequest("unknown_color", "");
+        }
+
         $(document).ready(function () {
             // connect to Nao
             function disconnected() {
@@ -56,6 +65,9 @@
     <input type="button" id="btn_resume" value="Resume" onclick="resume();" /><br /><br /><br />
     <b>Text for the robot to say:</b><br />
     <input type="text" id="tts_input" /><br />
-    <input type="button" id="btn_send_tts" value="Say it!" onclick="sendTTS();" />
+    <input type="button" id="btn_send_tts" value="Say it!" onclick="sendTTS();" /><br / ><br />
+    <input type="button" id="btn_blue" value="Blue" onclick="setColor('rgba(128, 128, 255, 1.0)', 'blauw');" />
+    <input type="button" id="btn_unknown_color" value="Unknown color" onclick="unknownColor();" />
+
 </body>
 </html>

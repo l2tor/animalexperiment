@@ -17,6 +17,7 @@ class TabletGate(ALModule):
         """
         Robot.memoryProxy.subscribeToEvent("answer", self._name, "answer_event")
         Robot.memoryProxy.subscribeToEvent("answer_time", self._name, "answer_time_event")
+        Robot.memoryProxy.subscribeToEvent("set_chosen_action", self._name, "set_chosen_action_event")
 
     def answer_time_event(self, key, value):
         self._interaction_manager.log_answer_time(value)
@@ -62,3 +63,6 @@ class TabletGate(ALModule):
             :param skilltext: The skill-text to be displayed.
         """
         Robot.memoryProxy.raiseEvent("show_skilltext", skilltext)
+
+    def set_chosen_action_event(self, key, value):
+        self._interaction_manager.set_chosen_action(value)

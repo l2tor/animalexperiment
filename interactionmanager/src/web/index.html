@@ -45,6 +45,12 @@
             sendRequest("start_button_clicked");
         }
 
+        function set_difficulty(value) {
+            $('#difficulty_choice').css('display', 'none');
+
+            sendRequest("set_chosen_action", value);
+        }
+
         var _session = null;
         var img_base_path = "images/";
         var sizes = {'SMALL':'img_small', 'MEDIUM':'img_medium', 'BIG':'img_big'};
@@ -58,9 +64,26 @@
                 console.log("disconnected");
             }
 
+            // To change the color
+            $('body').css('background-color', 'rgba(240, 220, 200, 1.0)'); // #ff0000
+
             QiSession(function (session) {
                 _session = session;
                 session.service("ALMemory").then(function (ALMemory) {
+
+                    ALMemory.subscriber('difficulty_setting').then(function(sub) {
+                        sub.signal.connect(function(result) {
+                            console.log("=== DIFFICULTY CHOICE");
+                            $('#container').css("display", "none");  
+                            $('#difficulty_choice').css("display", "flex");                        
+                        });
+                    });
+
+                    ALMemory.subscriber('change_color').then(function(sub) {
+                        sub.signal.connect(function(result) {
+                            $('body').css('background-color', result);
+                        });
+                    });
 
                     // show the four images for the next task
                     ALMemory.subscriber('set_images').then(function (sub) {
@@ -200,6 +223,15 @@
      <img src="images/happy_face.png" style="height: 100%" ontouchstart="start_button();" />
 </div>
 
+<div id="difficulty_choice" style="display: none; width: 100%; height: 100%;">
+    <div id="difficulty_medium" style="width: 50%; display: flex; align-items: center; justify-content: center">
+        <img src="images/difficulty_medium.png" style="width: 100%" ontouchstart="set_difficulty('task_m');" />
+    </div>
+    <div id="difficulty_hard" style="width: 50%; display: flex; align-items: center; justify-content: center">
+        <img src="images/difficulty_hard.png" style="width: 100%" ontouchstart="set_difficulty('task_h');" />
+    </div>
+</div>
+
 <div id="container">
     <div id="left_col">
         <div id="div_0" class="image_container">
@@ -234,4 +266,4 @@
     <img id="img_cor" class="img_response" src="" alt=""/>
 </div>
 </body>
-</html>
+</html>"

@@ -41,6 +41,8 @@ import datetime
 # 11b. If the answer was incorrect, negative feedback is given and the child is asked to answer the same question once more -> back to step 10.
 # 12. After 30 rounds (or however much was configured), the experiment ends.
 
+# To trigger robot gesture: self.s.ALBehaviorManager.runBehavior('Animals/Boks')
+
 class ALAnimalExperimentService(object):
     "NAOqi service for animal experiment."
     APP_ID = "com.aldebaran.ALMyService"
@@ -54,6 +56,11 @@ class ALAnimalExperimentService(object):
         self.logger = stk.logging.get_logger(qiapp.session, self.APP_ID)
 
         self.gestures = True
+        self.motivation_autonomy = False
+        self.motivation_competence = False
+        self.motivation_relatedness = False
+        self.explain_difficulty_level = True
+        self.child_name = ''
         self.paused = False
 
         # The concepts to be taught, update here if needed!
@@ -134,7 +141,10 @@ class ALAnimalExperimentService(object):
         self.s.ALMemory.subscribeToEvent("validation", "ALAnimalExperimentService", "show_validation_event")
         self.s.ALMemory.subscribeToEvent("start_button_clicked", "ALAnimalExperimentService", "start_button_clicked_event")
         self.s.ALMemory.subscribeToEvent("gesture_condition", "ALAnimalExperimentService", "gesture_condition_event")
+        self.s.ALMemory.subscribeToEvent("motivation_condition", "ALAnimalExperimentService", "motivation_condition_event")
         self.s.ALMemory.subscribeToEvent("tts", "ALAnimalExperimentService", "tts_event")
+        self.s.ALMemory.subscribeToEvent("color_picked", "ALAnimalExperimentService", "color_picked_event")
+        self.s.ALMemory.subscribeToEvent("unknown_color", "ALAnimalExperimentService", "unknown_color_event")
 
         # Selection of positive feedback sentences
         self.pos_feedback = ["Goed gedaan!",
@@ -182,6 +192,21 @@ class ALAnimalExperimentService(object):
         else:
             self.gestures = False
 
+    def motivation_condition_event(self, key, value):
+        self.logger.info("Motivation condition is set to: " + str(value))
+        if value == 0:
+            self.motivation_autonomy = False
+            self.motivation_competence = False
+            self.motivation_relatedness = False
+        elif value == 1:
+            self.motivation_autonomy = True
+            self.motivation_competence = True
+            self.motivation_relatedness = False
+        else:
+            self.motivation_autonomy = True
+            self.motivation_competence = True
+            self.motivation_relatedness = True        
+
     # This event is triggered after the robot explains the game, if the participant
     # selects the red smiley face (indicating they did not understand the instructions).
     # This stops the interaction so that the experimenter can step in. The remaining green
@@ -225,7 +250,6 @@ class ALAnimalExperimentService(object):
         self.s.ALTextToSpeech.say("Joepie!")
         self.s.ALTextToSpeech.say("Daar gaan we dan.")
 
-        # This is a call to the interactionmanager, essentially triggering the start of the next round.
         self.s.ALMemory.raiseEvent("describe_object", "")
 
     # This is a practice round (first in Dutch, then in English).
@@ -420,7 +444,20 @@ class ALAnimalExperimentService(object):
             if self.round_number <= self.num_rounds:
                 if self.paused:
                     return
-                self.s.ALMemory.raiseEvent("describe_object", "")
+
+                if self.round_number > 2 and self.motivation_autonomy == True and (self.round_number - 1) % 5 == 0:
+                    self.s.ALMemory.raiseEvent("difficulty_setting", "")
+
+                    if self.explain_difficulty_level == True:
+                        self.s.ALTextToSpeech.say("Vanaf nu mag jij kiezen hoe we het spelletje gaan spelen. Op de \prn=t E: b l @ t \ staan twee plaatjes. Jij mag 1 van de 2 plaatjes aantikken, dan gaan we dat spelen! Tik maar op een plaatje.")
+                        self.explain_difficulty_level = False
+                    else:
+                        self.s.ALTextToSpeech.say("Nu mag jij weer kiezen hoe je het spelletje wilt spelen! Tik maar op een plaatje.")
+
+
+                else:
+                    # This is a call to the interactionmanager, essentially triggering the start of the next round.                    
+                    self.s.ALMemory.raiseEvent("describe_object", "")
 
             # We're done, end the experiment!
             else:   
@@ -464,27 +501,11 @@ class ALAnimalExperimentService(object):
             self.s.ALMemory.raiseEvent("describe_object", "")
 
 
-    # The start button on the control panel is pressed -> start the interaction by introducing the game.
-    # The name of the child (entered in the control panel) is passed as "value"
-    def start_event(self, key, value):
-        self.logger.info("Start introduction")
-        print "start intro"
-        self.tts_set_language("Dutch")
+    def unknown_color_event(self, key, value):
+        self.s.ALTextToSpeech.say("Die kleur ken ik niet! Welke kleur vind je nog meer leuk?")
 
-        # Initialize the robot's position: standing, without animated speech (BodyLanguageMode == 0)
-        self.s.ALRobotPosture.goToPosture("Stand", 0.1)
-        self.s.ALAnimatedSpeech.setBodyLanguageMode(0)
-
-        # Set breathing mode
-        self.s.ALMotion.setBreathEnabled("Head", True)
-        time.sleep(1)
-        self.s.ALMotion.setBreathEnabled("Body", True)
-
-        # Introduce the game
-        intro = ["Hallo "+value+"!",
-                "Wat leuk je weer te zien!",
-                "\\pau=100\\Ken je me nog?",
-                "Ik ben Robin!",
+    def color_picked_event(self, key, value):
+        intro = ["Wat leuk! " + value + " is ook mijn favoriete kleur!",
                 "Laten we een spelletje spelen!",
                 "Mijn lievelingsspelletje is 'ik zie ik zie wat jij niet ziet'.",
                 "Vandaag gaan we dat spelen op de \prn=t E: b l @ t \!",
@@ -502,6 +523,89 @@ class ALAnimalExperimentService(object):
 
         # Show green/red smiley on screen to trigger the next step of the game.
         self.s.ALMemory.raiseEvent("activate_faces", "true");
+
+    # The start button on the control panel is pressed -> start the interaction by introducing the game.
+    # The name of the child (entered in the control panel) is passed as "value"
+    def start_event(self, key, value):
+        self.child_name = value
+
+        self.logger.info("Start introduction")
+        print "start intro"
+        self.tts_set_language("Dutch")
+
+        # Initialize the robot's position: standing, without animated speech (BodyLanguageMode == 0)
+        # In motivational modes we have a sitting position, with relatedness next to the child and otherwise opposite to the child
+        if self.motivation_autonomy == True or self.motivation_competence == True or self.motivation_relatedness == True:
+            self.s.ALRobotPosture.goToPosture("Crouch",0.5)
+
+            self.s.ALLeds.on('AllLeds')
+            # Go to crouching position and disable stiffness in legs, also courtsey of Plymouth :)
+            names  = ['RKneePitch', 'LKneePitch','RAnklePitch','LAnklePitch','RAnkleRoll','LAnkleRoll']
+            stiffnesses  = 0.0
+            self.s.ALMotion.setStiffnesses(names,stiffnesses)
+            self.s.ALMotion.setBreathEnabled("Arms", True)
+
+            # Look at the child
+            if self.motivation_relatedness == True:
+                self.s.ALMotion.angleInterpolationWithSpeed("Head", [0.36, 0.0199001], 0.2)
+
+            # Look straight ahead
+            else:
+                self.s.ALMotion.angleInterpolationWithSpeed("Head", [0, 0], 0.2)
+
+            # Blinking behaviour, courtesy of Plymouth :-)
+            try:
+                self.s.ALBehaviorManager.startBehavior("custom/blinking")
+            except:
+                pass    
+
+
+        else:
+            self.s.ALRobotPosture.goToPosture("Stand", 0.1)
+            self.s.ALAnimatedSpeech.setBodyLanguageMode(0)
+
+            # Set breathing mode
+            self.s.ALMotion.setBreathEnabled("Head", True)
+            time.sleep(1)
+            self.s.ALMotion.setBreathEnabled("Body", True)
+
+        # Introduce the game
+
+        if self.motivation_relatedness == True:
+            intro = ["Hallo "+value+"!",
+                    "Wat leuk je weer te zien!",
+                    "\\pau=100\\Ken je me nog?",
+                    "Ik ben Robin!",
+                    "Wat is jouw lievelingskleur?"]
+
+            self.intro_start = datetime.datetime.now()
+
+            for line in intro:
+                print line
+                self.s.ALTextToSpeech.say(line)            
+
+        else:
+            intro = ["Hallo "+value+"!",
+                    "Wat leuk je weer te zien!",
+                    "\\pau=100\\Ken je me nog?",
+                    "Ik ben Robin!"
+                    "Laten we een spelletje spelen!",
+                    "Mijn lievelingsspelletje is 'ik zie ik zie wat jij niet ziet'.",
+                    "Vandaag gaan we dat spelen op de \prn=t E: b l @ t \!",
+                    "Daar verschijnen zo plaatjes van dieren op.",
+                    "Als ik zeg 'ik zie ik zie wat jij niet ziet, en het is een, puntje puntje puntje', dan moet jij aanraken welk dier je denkt dat ik zie.",
+                    "Snap je dat?",
+                    "Druk maar op het groene gezichtje als je het snapt.",
+                    "Als je het niet snapt dan moet je drukken op het rode gezichtje."]
+
+            self.intro_start = datetime.datetime.now()
+
+            for line in intro:
+                print line
+                self.s.ALTextToSpeech.say(line)
+
+            # Show green/red smiley on screen to trigger the next step of the game.
+            self.s.ALMemory.raiseEvent("activate_faces", "true");
 
     @qi.bind(returnType=qi.Void, paramsType=[])
     def stop(self):

@@ -14,6 +14,8 @@ import webbrowser
 # 2 = random, gestures
 # 3 = adaptive, no gestures
 # 4 = adaptive, gestures
+# 5 = random, no gestures, autonomy + competence
+# 6 = random, no gestures, autonomy + competence + relatedness
 
 def main(argv):
 	strategy = 'random'
@@ -41,10 +43,12 @@ def main(argv):
 			ip = arg
 		elif opt in ("-c", "--condition"):
 			try:
-				if int(arg) > 0 and int(arg) < 5:
+				if int(arg) > 0 and int(arg) < 7:
 					condition = int(arg)
 			except ValueError:
 				pass
+
+	motivation = 0
 
 	if condition == 0:
 		print 'start.py -i <robot_ip> -c <condition>'
@@ -56,6 +60,15 @@ def main(argv):
 	if condition == 2 or condition == 4:
 		gestures = 1
 
+	if condition == 5 or condition == 6:
+		strategy = 'random'
+		gestures = 0
+		if condition == 5:
+			motivation = 1 # autonomy + competence
+		else:
+			motivation = 2 # autonomy + competence + relatedness
+
+
 	# Write robot IP to file
 	f = open('robotip.js', 'w')
 	f.write('ROBOT_IP = "' + ip + '";')
@@ -66,7 +79,7 @@ def main(argv):
 
 	# Interaction manager, however, does!
 	os.chdir('interactionmanager/src')
-	p2 = subprocess.Popen(shlex.split("python interaction_manager.py --ip " + ip + " --port 9559 --sysip 127.0.0.1 --mode \"" + strategy + "\" --sgroups \"type\" --L1 \"German\" --L2 \"English\" --concepts \"../data/study_1/animals_concepts.csv\" --cbindings \"../data/study_1/animals_concept_bindings.csv\" --rnr=30 --gestures=" + str(gestures)))
+	p2 = subprocess.Popen(shlex.split("python interaction_manager.py --ip " + ip + " --port 9559 --sysip 127.0.0.1 --mode \"" + strategy + "\" --sgroups \"type\" --L1 \"German\" --L2 \"English\" --concepts \"../data/study_1/animals_concepts.csv\" --cbindings \"../data/study_1/animals_concept_bindings.csv\" --rnr=30 --gestures=" + str(gestures) + " --motivation=" + str(motivation)))
 
 	time.sleep(2)
 

@@ -10,6 +10,7 @@
         <BehaviorDescription name="behavior" src="Animals/Hippo_en" xar="behavior.xar" />
         <BehaviorDescription name="behavior" src="Animals/Hippo" xar="behavior.xar" />
         <BehaviorDescription name="behavior" src="Animals/Chicken" xar="behavior.xar" />
+        <BehaviorDescription name="behavior" src="Animals/Boks" xar="behavior.xar" />
     </BehaviorDescriptions>
     <Dialogs />
     <Resources />

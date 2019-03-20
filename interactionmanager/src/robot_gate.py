@@ -182,3 +182,6 @@ class NaoRobotGate(ALModule):
             flow could go on. This is used for example after doing some non-verbal behavior etc.
         """
         Robot.memoryProxy.raiseEvent("gesture_condition", value)
+
+    def setMotivationCondition(self, value):
+        Robot.memoryProxy.raiseEvent("motivation_condition", value)
