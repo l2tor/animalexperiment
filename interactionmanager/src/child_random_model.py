@@ -129,7 +129,7 @@ class ChildRandomModel:
 
         # for the test if the user understood the task, just choose a random skill form the list
         if self._test_mode:
-            next_skill = self._skill_list[4] # We use chicken in the introduction  #self._tmp_skill_list[randint(0, len(self._tmp_skill_list)-1)]
+            next_skill = self._skill_list[2] # We use chicken in the introduction  #self._tmp_skill_list[randint(0, len(self._tmp_skill_list)-1)]
         elif not logger:
             next_skill = self._tmp_skill_list[-1]
         else:

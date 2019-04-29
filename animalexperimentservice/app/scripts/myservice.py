@@ -54,53 +54,231 @@ class ALAnimalExperimentService(object):
         self.logger = stk.logging.get_logger(qiapp.session, self.APP_ID)
 
         self.gestures = True
+        self.gesture_variation = False
         self.paused = False
 
         # The concepts to be taught, update here if needed!
         self.target_words = {
-            "MONKEY": {
-                "English": "monkey",
-                "Dutch": "aap",
-                "Behavior": "Animals/Monkey",
-                "SoundSetName": "Test/monkey",
-                "AnimatedSpeechTag": "^start(Animals/Monkey) \\pau=2950\\. ^runSound(Test/monkey) ^wait(Animals/Monkey)"
+            "BRIDGE": {
+                "English": "bridge",
+                "Dutch": "brug",
+                "Gesture": {
+                    "Id": "VariationGestures/Bridge1",
+                    "Pause_before": 2.5,
+                    "Pause_after": 2
+                },
+                "Gestures": [
+                    {
+                        "Id": "VariationGestures/Bridge1",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2
+                    },                
+                    {
+                        "Id": "VariationGestures/Bridge2",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2
+                    },                
+                    {
+                        "Id": "VariationGestures/Bridge3",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2
+                    },                
+                    {
+                        "Id": "VariationGestures/Bridge4",
+                        "Pause_before": 5,
+                        "Pause_after": 3
+                    },                
+                    {
+                        "Id": "VariationGestures/Bridge5",
+                        "Pause_before": 1.5,
+                        "Pause_after": 1.5
+                    }             
+                ]
             },
-            "CHICKEN": {
-                "English": "chicken",
-                "Dutch": "kip",
-                "Behavior": "Animals/Chicken",
-                "SoundSetName": "Test/chicken",
-                "AnimatedSpeechTag": "^start(Animals/Chicken) \\pau=3100\\. ^runSound(Test/chicken) ^wait(Animals/Chicken)"
+            "STAIRS": {
+                "English": "stairs",
+                "Dutch": "trap",
+                "Gesture": {
+                    "Id": "VariationGestures/Stairs2",
+                    "Pause_before": 2.5,
+                    "Pause_after": 0.5
+                },
+                "Gestures": [
+                    {
+                        "Id": "VariationGestures/Stairs1",
+                        "Pause_before": 2.5,
+                        "Pause_after": 0.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Stairs2",
+                        "Pause_before": 2.5,
+                        "Pause_after": 0.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Stairs3",
+                        "Pause_before": 4,
+                        "Pause_after": 9
+                    },                
+                    {
+                        "Id": "VariationGestures/Stairs4",
+                        "Pause_before": 4,
+                        "Pause_after": 2
+                    },                
+                    {
+                        "Id": "VariationGestures/Stairs5",
+                        "Pause_before": 4,
+                        "Pause_after": 2
+                    } 
+                ]
             },
             "HORSE": {
                 "English": "horse",
                 "Dutch": "paard",
-                "Behavior": "Animals/Horse",
-                "SoundSetName": "Test/horse",
-                "AnimatedSpeechTag": "^start(Animals/Horse) \\pau=2400\\. ^runSound(Test/horse) ^wait(Animals/Horse)"
+                "Gesture": {
+                    "Id": "VariationGestures/Horse3",
+                    "Pause_before": 4,
+                    "Pause_after": 3
+                },
+                "Gestures": [
+                    {
+                        "Id": "VariationGestures/Horse1",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2
+                    },                
+                    {
+                        "Id": "VariationGestures/Horse2",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2
+                    },                
+                    {
+                        "Id": "VariationGestures/Horse3",
+                        "Pause_before": 4,
+                        "Pause_after": 3
+                    },                
+                    {
+                        "Id": "VariationGestures/Horse4",
+                        "Pause_before": 4,
+                        "Pause_after": 3
+                    },                
+                    {
+                        "Id": "VariationGestures/Horse5",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2.5
+                    } 
+                ]                
             },
-            "BIRD": {
-                "English": "bird",
-                "Dutch": "vogel",
-                "Behavior": "Animals/Bird",
-                "SoundSetName": "Test/bird",
-                "AnimatedSpeechTag": "^start(Animals/Bird) \\pau=1450\\. ^runSound(Test/bird) ^wait(Animals/Bird)"
+            "TURTLE": {
+                "English": "turtle",
+                "Dutch": "schildpad",
+                "Gesture": {
+                    "Id": "VariationGestures/Turtle3",
+                    "Pause_before": 2.5,
+                    "Pause_after": 5
+                },
+                "Gestures": [
+                    {
+                        "Id": "VariationGestures/Turtle1",
+                        "Pause_before": 4,
+                        "Pause_after": 5.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Turtle2",
+                        "Pause_before": 4,
+                        "Pause_after": 4
+                    },                
+                    {
+                        "Id": "VariationGestures/Turtle3",
+                        "Pause_before": 2.5,
+                        "Pause_after": 5
+                    },                
+                    {
+                        "Id": "VariationGestures/Turtle4",
+                        "Pause_before": 2.5,
+                        "Pause_after": 4
+                    },                
+                    {
+                        "Id": "VariationGestures/Turtle5",
+                        "Pause_before": 4,
+                        "Pause_after": 1.5
+                    } 
+                ]                 
             },
-            "HIPPO": {
-                "English": "hippo",
-                "Dutch": "nijlpaard",
-                "Behavior": "Animals/Hippo",
-                "SoundSetName": "Test/hippo",
-                "AnimatedSpeechTag": "^start(Animals/Hippo) \\pau=2400\\. ^runSound(Test/hippo) ^wait(Animals/Hippo)"
+            "SPOON": {
+                "English": "spoon",
+                "Dutch": "lepel",
+                "Gesture": {
+                    "Id": "VariationGestures/Spoon1",
+                    "Pause_before": 2.5,
+                    "Pause_after": 5
+                },
+                "Gestures": [
+                    {
+                        "Id": "VariationGestures/Spoon1",
+                        "Pause_before": 2.5,
+                        "Pause_after": 5
+                    },                
+                    {
+                        "Id": "VariationGestures/Spoon2",
+                        "Pause_before": 2,
+                        "Pause_after": 7
+                    },                
+                    {
+                        "Id": "VariationGestures/Spoon3",
+                        "Pause_before": 4,
+                        "Pause_after": 5
+                    },                
+                    {
+                        "Id": "VariationGestures/Spoon4",
+                        "Pause_before": 1,
+                        "Pause_after": 5.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Spoon5",
+                        "Pause_before": 1,
+                        "Pause_after": 5
+                    } 
+                ]    
             },
-            "LADYBUG": {
-                "English": "ladybug",
-                "Dutch": "lieveheersbeestje",
-                "Behavior": "Animals/Spider",
-                "SoundSetName": "Test/ladybug",
-                "AnimatedSpeechTag": "^start(Animals/Spider) \\pau=1850\\. ^runSound(Test/ladybug) ^wait(Animals/Spider)"
+            "PENCIL": {
+                "English": "pencil",
+                "Dutch": "potlood",
+                "Gesture": {
+                    "Id": "VariationGestures/Pencil5",
+                    "Pause_before": 1.5,
+                    "Pause_after": 5
+                },
+                "Gestures": [
+                    {
+                        "Id": "VariationGestures/Pencil1",
+                        "Pause_before": 2.5,
+                        "Pause_after": 6.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Pencil2",
+                        "Pause_before": 2.5,
+                        "Pause_after": 2.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Pencil3",
+                        "Pause_before": 1.5,
+                        "Pause_after": 2.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Pencil4",
+                        "Pause_before": 1.5,
+                        "Pause_after": 2.5
+                    },                
+                    {
+                        "Id": "VariationGestures/Pencil5",
+                        "Pause_before": 1.5,
+                        "Pause_after": 5
+                    } 
+                ]                
             }
         }
+
+        for k, v in self.target_words.iteritems():
+            random.shuffle(v['Gestures'])
 
         #self.isDutchIntro = True
         self.isFirstTestRun = True
@@ -134,7 +312,9 @@ class ALAnimalExperimentService(object):
         self.s.ALMemory.subscribeToEvent("validation", "ALAnimalExperimentService", "show_validation_event")
         self.s.ALMemory.subscribeToEvent("start_button_clicked", "ALAnimalExperimentService", "start_button_clicked_event")
         self.s.ALMemory.subscribeToEvent("gesture_condition", "ALAnimalExperimentService", "gesture_condition_event")
+        self.s.ALMemory.subscribeToEvent("gesture_variation", "ALAnimalExperimentService", "gesture_variation_event")
         self.s.ALMemory.subscribeToEvent("tts", "ALAnimalExperimentService", "tts_event")
+        self.s.ALMemory.subscribeToEvent("say_target_word", "ALAnimalExperimentService", "say_target_word_event")
 
         # Selection of positive feedback sentences
         self.pos_feedback = ["Goed gedaan!",
@@ -181,6 +361,14 @@ class ALAnimalExperimentService(object):
             self.gestures = True
         else:
             self.gestures = False
+
+    # Event to set the gesture variation condition (sent from interactionmanager)
+    def gesture_variation_event(self, key, value):
+        self.logger.info("Gesture variation is set to: " + str(value))
+        if value == 1:
+            self.gesture_variation = True
+        else:
+            self.gesture_variation = False
 
     # This event is triggered after the robot explains the game, if the participant
     # selects the red smiley face (indicating they did not understand the instructions).
@@ -237,7 +425,7 @@ class ALAnimalExperimentService(object):
         if self.isFirstTestRun and not self.isLastAnswerWrong:
             self.s.ALMemory.raiseEvent("show_images", False)
             practice_1 = ["Kijk!",
-                    "Op de \prn=t E: b l @ t \ zijn een boell dieren verschenen.",
+                    "Op de \prn=t E: b l @ t \ zijn een boell plaatjes verschenen.",
                     "\\pau=500\\Ok.",
                     "Nu gaan we oefenen\\pau=250\\"]
             
@@ -258,21 +446,47 @@ class ALAnimalExperimentService(object):
         
         # This is the first introduction round (in Dutch)
         if self.isFirstTestRun:
+            the_item = self.target_words["HORSE"]
+
             # If this is the first time the item is presented, the robot pronounces the entire task.
             if not self.isLastAnswerWrong:
                 if self.gestures:
-                    self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een ^start(Animals/Chicken) \\pau=2600\\. ^runSound(Test/kip) ^wait(Animals/Chicken). Tik maar op de \\pau=500\\ ^runSound(Test/kip)")
+                    self.s.ALTextToSpeech.say('Ik zie ik zie wat jij niet ziet, en het is een')
+                    self.s.ALBehaviorManager.startBehavior(the_item["Gesture"]["Id"])        
+                    # self.s.ALAudioDevice.setOutputVolume(80)
+                    time.sleep(the_item["Gesture"]["Pause_before"])
+                    self.s.ALTextToSpeech.say(the_item["Dutch"])
+                    # self.s.ALAudioDevice.setOutputVolume(60)
+                    time.sleep(the_item["Gesture"]["Pause_after"])
+                    self.s.ALTextToSpeech.say('Tik maar op het ' + the_item["Dutch"])
+                    # self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een ^start(Animals/Chicken) \\pau=2600\\. ^runSound(Test/kip) ^wait(Animals/Chicken). Tik maar op de \\pau=500\\ ^runSound(Test/kip)")
                 
-                else:                    
-                    self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een.. ^runSound(Test/kip). \\pau=500\\ Tik maar op de \\pau=500\\ ^runSound(Test/kip)")
+                else: 
+                    self.s.ALTextToSpeech.say('Ik zie ik zie wat jij niet ziet, en het is een..')
+                    self.s.ALTextToSpeech.say(the_item["Dutch"])
+                    self.s.ALTextToSpeech.say('Tik maar op het..')
+                    self.s.ALTextToSpeech.say(the_item["Dutch"])
+
+                    # self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een.. ^runSound(Test/kip). \\pau=500\\ Tik maar op de \\pau=500\\ ^runSound(Test/kip)")
            
             # If this is a correction step (after incorrect answer), we don't introduce the full task but only repeat the target word
             else:#if self.isLastAnswerWrong:
                 if self.gestures:
-                    self.s.ALAnimatedSpeech.say("Tik maar op de ^start(Animals/Chicken) \\pau=3100\\. ^runSound(Test/kip) ^wait(Animals/Chicken).")
+                    self.s.ALTextToSpeech.say('Tik maar op het')
+                    self.s.ALBehaviorManager.startBehavior(the_item["Gesture"]["Id"])        
+                    # self.s.ALAudioDevice.setOutputVolume(80)
+                    time.sleep(the_item["Gesture"]["Pause_before"])
+                    self.s.ALTextToSpeech.say(the_item["Dutch"])
+                    # self.s.ALAudioDevice.setOutputVolume(60)
+                    time.sleep(the_item["Gesture"]["Pause_after"])        
+
+                    # self.s.ALAnimatedSpeech.say("Tik maar op de ^start(Animals/Chicken) \\pau=3100\\. ^runSound(Test/kip) ^wait(Animals/Chicken).")
 
                 else:
-                    self.s.ALAnimatedSpeech.say("Tik maar op de \\pau=500\\ ^runSound(Test/kip)")
+                    self.s.ALTextToSpeech.say('Tik maar op het..')
+                    self.s.ALTextToSpeech.say(the_item["Dutch"])
+
+                    # self.s.ALAnimatedSpeech.say("Tik maar op de \\pau=500\\ ^runSound(Test/kip)")
             
         # This is either the English test run or an actual round (not the Dutch test run)
         else:
@@ -294,22 +508,79 @@ class ALAnimalExperimentService(object):
                 if not self.isTestRun and self.round_number == 2:
                     self.s.ALTextToSpeech.say("Laten we doorgaan met de volgende. \\pau=250\\")
                 if self.round_number > 2 and self.round_number < 6:
-                    self.s.ALTextToSpeech.say("Nu komt het volgende dier. \\pau=250\\")
+                    self.s.ALTextToSpeech.say("Nu komt het volgende ding. \\pau=250\\")
                 if self.round_number > 5 and self.round_number < 9:
                     self.s.ALTextToSpeech.say("Volgende! \\pau=250\\")
 
                 if self.gestures:
-                    self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een " + self.target_words[value]['AnimatedSpeechTag'] + ". Tik maar op de \\pau=500\\ ^runSound(" + self.target_words[value]['SoundSetName'] + ")")
+                    the_gesture = self.target_words[value]["Gesture"]
+
+                    if self.gesture_variation and not self.isTestRun:
+                        the_gesture = self.target_words[value]["Gestures"][int((self.round_number - 1) / 6)]
+                        print "taking index " + str(int((self.round_number - 1) / 6)) + " for gesture in round " + str(self.round_number)
+
+                    self.s.ALTextToSpeech.say('Ik zie ik zie wat jij niet ziet, en het is een')
+                    if the_gesture["Id"] == 'VariationGestures/Bridge3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
+                        self.s.ALMotion.moveTo(0.0, 0.0, 1.0, [["MaxStepFrequency", 0.25]])
+
+                    self.s.ALBehaviorManager.startBehavior(the_gesture["Id"])        
+                    self.s.ALAudioDevice.setOutputVolume(80)
+                    time.sleep(the_gesture["Pause_before"])
+                    self.s.ALTextToSpeech.say(self.target_words[value]["English"], 'English')
+                    self.s.ALAudioDevice.setOutputVolume(60)
+                    time.sleep(the_gesture["Pause_after"])
+                    self.s.ALTextToSpeech.say('Tik maar op de')
+                    self.s.ALAudioDevice.setOutputVolume(80)
+                    self.s.ALTextToSpeech.say(self.target_words[value]["English"], 'English')
+                    self.s.ALAudioDevice.setOutputVolume(60)
+                    if the_gesture["Id"] == 'VariationGestures/Bridge3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
+                        self.s.ALMotion.moveTo(0.0, 0.0, -0.75, [["MaxStepFrequency", 0.25]])
+                    # self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een " + self.target_words[value]['AnimatedSpeechTag'] + ". Tik maar op de \\pau=500\\ ^runSound(" + self.target_words[value]['SoundSetName'] + ")")
 
                 else:
-                    self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een.. ^runSound(" + self.target_words[value]['SoundSetName'] + "). \\pau=500\\ Tik maar op de \\pau=500\\ ^runSound(" + self.target_words[value]['SoundSetName'] + ")")
+                    self.s.ALTextToSpeech.say('Ik zie ik zie wat jij niet ziet, en het is een..')
+                    self.s.ALAudioDevice.setOutputVolume(80)
+                    self.s.ALTextToSpeech.say(self.target_words[value]["English"], 'English')
+                    self.s.ALAudioDevice.setOutputVolume(60)
+                    self.s.ALTextToSpeech.say('Tik maar op de..')
+                    self.s.ALAudioDevice.setOutputVolume(80)
+                    self.s.ALTextToSpeech.say(self.target_words[value]["English"], 'English')
+                    self.s.ALAudioDevice.setOutputVolume(60)
+
+                    # self.s.ALAnimatedSpeech.say("Ik zie ik zie wat jij niet ziet, en het is een.. ^runSound(" + self.target_words[value]['SoundSetName'] + "). \\pau=500\\ Tik maar op de \\pau=500\\ ^runSound(" + self.target_words[value]['SoundSetName'] + ")")
 
             # If this is a correction step (after incorrect answer), we don't introduce the full task but only repeat the target word
             if self.isLastAnswerWrong:
                 if self.gestures:
-                    self.s.ALAnimatedSpeech.say("Tik maar op de " + self.target_words[value]['AnimatedSpeechTag'] + ".")
+                    the_gesture = self.target_words[value]["Gesture"]
+
+                    if self.gesture_variation and not self.isTestRun:
+                        the_gesture = self.target_words[value]["Gestures"][int((self.round_number - 1) / 6)]
+                        print "taking index " + str(int((self.round_number - 1) / 6)) + " for gesture in round " + str(self.round_number)
+
+                    self.s.ALTextToSpeech.say('Tik maar op de')
+
+                    if the_gesture["Id"] == 'VariationGestures/Turtle3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
+                        self.s.ALMotion.moveTo(0.0, 0.0, 1.0, [["MaxStepFrequency", 0.25]])                   
+
+                    self.s.ALBehaviorManager.startBehavior(the_gesture["Id"])        
+                    self.s.ALAudioDevice.setOutputVolume(80)
+                    time.sleep(the_gesture["Pause_before"])
+                    self.s.ALTextToSpeech.say(self.target_words[value]["English"], 'English')
+                    self.s.ALAudioDevice.setOutputVolume(60)
+                    time.sleep(the_gesture["Pause_after"])              
+
+                    if the_gesture["Id"] == 'VariationGestures/Turtle3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
+                        self.s.ALMotion.moveTo(0.0, 0.0, -0.75, [["MaxStepFrequency", 0.25]])                           
+
+                    # self.s.ALAnimatedSpeech.say("Tik maar op de " + self.target_words[value]['AnimatedSpeechTag'] + ".")
                 else:
-                    self.s.ALAnimatedSpeech.say("Tik maar op de \\pau=500\\ ^runSound(" + self.target_words[value]['SoundSetName'] + ")")
+                    self.s.ALTextToSpeech.say('Tik maar op de..')
+                    self.s.ALAudioDevice.setOutputVolume(80)
+                    self.s.ALTextToSpeech.say(self.target_words[value]["English"], 'English')
+                    self.s.ALAudioDevice.setOutputVolume(60)
+
+                    # self.s.ALAnimatedSpeech.say("Tik maar op de \\pau=500\\ ^runSound(" + self.target_words[value]['SoundSetName'] + ")")
         
 
         if self.paused:
@@ -389,7 +660,11 @@ class ALAnimalExperimentService(object):
             # Say the positive feedback utterance (randomly selected from a set)
             self.s.ALTextToSpeech.say(self.pos_feedback_picker())
             # Mention the correct answer once more as confirmation
-            self.s.ALAnimatedSpeech.say("Het Engelse woord voor " + self.target_words[result['answer']]['Dutch'] + " is \\pau=500\\ ^runSound(" + self.target_words[result['answer']]['SoundSetName'] + ")")
+            self.s.ALTextToSpeech.say("Het Engelse woord voor " + self.target_words[result['answer']]['Dutch'] + " is")
+            self.s.ALAudioDevice.setOutputVolume(80)
+            self.s.ALTextToSpeech.say(self.target_words[result['answer']]['English'], 'English')
+            self.s.ALAudioDevice.setOutputVolume(60)
+            # self.s.ALAnimatedSpeech.say("Het Engelse woord voor " + self.target_words[result['answer']]['Dutch'] + " is \\pau=500\\ ^runSound(" + self.target_words[result['answer']]['SoundSetName'] + ")")
 
             # If we are not in a test run anymore we increment the round number after a correct answer
             if not self.isTestRun:
@@ -437,8 +712,16 @@ class ALAnimalExperimentService(object):
             if self.isFirstTestRun: #self.isDutchIntro:
                 self.s.ALAnimatedSpeech.say("Dat was een " + self.target_words[result['answer']]['Dutch'] + ", maar ik zag een \\pau=500\\, " + self.target_words[result['correct_answer']]['Dutch'] + " \\pau=500\\")
             else:
-                self.s.ALAnimatedSpeech.say("Dat was een " + self.target_words[result['answer']]['Dutch'] + ", maar ik zag een \\pau=500\\, ^runSound(" + self.target_words[result['correct_answer']]['SoundSetName'] + ") \\pau=500\\")
-                self.s.ALAnimatedSpeech.say("^runSound(" + self.target_words[result['correct_answer']]['SoundSetName'] + ") is het Engelse woord voor " + self.target_words[result['correct_answer']]['Dutch'] + ".")
+                # self.s.ALAnimatedSpeech.say("Dat was een " + self.target_words[result['answer']]['Dutch'] + ", maar ik zag een \\pau=500\\, ^runSound(" + self.target_words[result['correct_answer']]['SoundSetName'] + ") \\pau=500\\")
+                self.s.ALTextToSpeech.say("Dat was een " + self.target_words[result['answer']]['Dutch'] + ", maar ik zag een")
+                self.s.ALAudioDevice.setOutputVolume(80)
+                self.s.ALTextToSpeech.say(self.target_words[result['correct_answer']]['English'], 'English')
+                time.sleep(1)
+                self.s.ALTextToSpeech.say(self.target_words[result['correct_answer']]['English'], 'English')
+                self.s.ALAudioDevice.setOutputVolume(60)
+                self.s.ALTextToSpeech.say("is het Engelse woord voor " + self.target_words[result['correct_answer']]['Dutch'])
+
+                # self.s.ALAnimatedSpeech.say("^runSound(" + self.target_words[result['correct_answer']]['SoundSetName'] + ") is het Engelse woord voor " + self.target_words[result['correct_answer']]['Dutch'] + ".")
 
             if self.paused:
                 return
@@ -464,6 +747,9 @@ class ALAnimalExperimentService(object):
             self.s.ALMemory.raiseEvent("describe_object", "")
 
 
+    def say_target_word_event(self, dummy, word):      
+        self.s.ALAudioPlayer.playFile('/home/nao/' + word + '.wav')
+
     # The start button on the control panel is pressed -> start the interaction by introducing the game.
     # The name of the child (entered in the control panel) is passed as "value"
     def start_event(self, key, value):
@@ -472,13 +758,34 @@ class ALAnimalExperimentService(object):
         self.tts_set_language("Dutch")
 
         # Initialize the robot's position: standing, without animated speech (BodyLanguageMode == 0)
-        self.s.ALRobotPosture.goToPosture("Stand", 0.1)
+        self.s.ALRobotPosture.goToPosture("Stand", 0.3)
         self.s.ALAnimatedSpeech.setBodyLanguageMode(0)
 
         # Set breathing mode
         self.s.ALMotion.setBreathEnabled("Head", True)
         time.sleep(1)
         self.s.ALMotion.setBreathEnabled("Body", True)
+        self.s.ALAudioDevice.setOutputVolume(60)
+
+        # Temporary test code
+        # self.s.ALTextToSpeech.say('Ik zie ik zie wat jij niet ziet, en het is een')
+        # self.s.ALMotion.moveTo(0.0, 0.0, 1.0, [["MaxStepFrequency", 0.25]])
+        # self.s.ALBehaviorManager.startBehavior("VariationGestures/Turtle5")        
+        # self.s.ALAudioDevice.setOutputVolume(80)
+        # time.sleep(4)
+        # self.s.ALTextToSpeech.say('turtle', 'English')
+        # self.s.ALAudioDevice.setOutputVolume(60)
+        # time.sleep(1.5)
+        # self.s.ALTextToSpeech.say('Tik maar op de')
+        # self.s.ALBehaviorManager.startBehavior("VariationGestures/Turtle5")        
+        # self.s.ALAudioDevice.setOutputVolume(80)
+        # time.sleep(4)
+        # self.s.ALTextToSpeech.say('turtle', 'English')
+        # self.s.ALAudioDevice.setOutputVolume(60)
+        # time.sleep(1.5)        
+        # self.s.ALMotion.moveTo(0.0, 0.0, -0.75, [["MaxStepFrequency", 0.25]])
+
+
 
         # Introduce the game
         intro = ["Hallo "+value+"!",
@@ -488,8 +795,8 @@ class ALAnimalExperimentService(object):
                 "Laten we een spelletje spelen!",
                 "Mijn lievelingsspelletje is 'ik zie ik zie wat jij niet ziet'.",
                 "Vandaag gaan we dat spelen op de \prn=t E: b l @ t \!",
-                "Daar verschijnen zo plaatjes van dieren op.",
-                "Als ik zeg 'ik zie ik zie wat jij niet ziet, en het is een, puntje puntje puntje', dan moet jij aanraken welk dier je denkt dat ik zie.",
+                "Daar verschijnen zo plaatjes op.",
+                "Als ik zeg 'ik zie ik zie wat jij niet ziet, en het is een, puntje puntje puntje', dan moet jij aanraken welk ding je denkt dat ik zie.",
                 "Snap je dat?",
                 "Druk maar op het groene gezichtje als je het snapt.",
                 "Als je het niet snapt dan moet je drukken op het rode gezichtje."]

@@ -1,2 +1,3 @@
 *.pyc
 interactionmanager/data/vp/
+tests/wav/aup/

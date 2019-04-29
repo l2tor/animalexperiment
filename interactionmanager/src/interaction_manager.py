@@ -25,7 +25,7 @@ class InteractionManager:
     # log-level
     LOG_LEVEL = 21
 
-    def __init__(self, mode, sgroups, l1, l2, concepts, cbindings, overall_round_nr, gestures):
+    def __init__(self, mode, sgroups, l1, l2, concepts, cbindings, overall_round_nr, gestures, gesture_variation):
         """
             Constructor to initialize the interaction manager. It loads the lesson-files from the harddrive and
             initialize the child model.
@@ -44,6 +44,7 @@ class InteractionManager:
         logging.basicConfig(format=FORMAT, filename='../data/vp/vp_' + str(max(file_numbers)+1), level=self.LOG_LEVEL)
         logging.log(self.LOG_LEVEL, "===" + json.dumps(mode) + "===")
         logging.log(self.LOG_LEVEL, "=== Gesture: " + json.dumps(gestures == 1) + " ===")
+        logging.log(self.LOG_LEVEL, "=== Gesture variation: " + json.dumps(gesture_variation == 1) + " ===")
 
         # initialize the callback-handler for robot events
         global robot_gate
@@ -55,6 +56,9 @@ class InteractionManager:
 
         # set gesture condition
         robot_gate.setGestureCondition(gestures)
+
+        # set gesture variation
+        robot_gate.setGestureVariation(gesture_variation)
 
         # load lesson files
         self._load_voc(concepts, cbindings)
@@ -431,10 +435,11 @@ if __name__ == "__main__":
     parser.add_argument("--sysip", type=str, default="192.168.178.22",
                         help="The system-IP on which the IM is running on.")
     parser.add_argument("--gestures", type=int, default=1, help="Gesture condition (1 = on, 0 = off)")
+    parser.add_argument("--gesture_variation", type=int, default=0, help="Variation in gestures (1 = on, 0 = off)")
 
     args = parser.parse_args()
     Robot.connect(args.ip, args.port, args.sysip)
-    int_manager = InteractionManager(args.mode, args.sgroups, args.L1, args.L2, args.concepts, args.cbindings, args.rnr, args.gestures)
+    int_manager = InteractionManager(args.mode, args.sgroups, args.L1, args.L2, args.concepts, args.cbindings, args.rnr, args.gestures, args.gesture_variation)
 
     global interrupted
     interrupted = False

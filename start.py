@@ -14,12 +14,14 @@ import webbrowser
 # 2 = random, gestures
 # 3 = adaptive, no gestures
 # 4 = adaptive, gestures
+# 5 = random, variation in gestures
 
 def main(argv):
 	strategy = 'random'
 	ip = '192.168.1.97'
 	condition = 0
 	gestures = 0
+	gesture_variation = 0
 
 	# Create the log file directory if it doesn't exist yet.
 	if not os.path.exists('interactionmanager/data'):
@@ -41,7 +43,7 @@ def main(argv):
 			ip = arg
 		elif opt in ("-c", "--condition"):
 			try:
-				if int(arg) > 0 and int(arg) < 5:
+				if int(arg) > 0 and int(arg) < 6:
 					condition = int(arg)
 			except ValueError:
 				pass
@@ -53,8 +55,11 @@ def main(argv):
 	if condition == 3 or condition == 4:
 		strategy = 'adaptive'
 
-	if condition == 2 or condition == 4:
+	if condition == 2 or condition == 4 or condition == 5:
 		gestures = 1
+
+	if condition == 5:
+		gesture_variation = 1
 
 	# Write robot IP to file
 	f = open('robotip.js', 'w')
@@ -66,7 +71,7 @@ def main(argv):
 
 	# Interaction manager, however, does!
 	os.chdir('interactionmanager/src')
-	p2 = subprocess.Popen(shlex.split("python interaction_manager.py --ip " + ip + " --port 9559 --sysip 127.0.0.1 --mode \"" + strategy + "\" --sgroups \"type\" --L1 \"German\" --L2 \"English\" --concepts \"../data/study_1/animals_concepts.csv\" --cbindings \"../data/study_1/animals_concept_bindings.csv\" --rnr=30 --gestures=" + str(gestures)))
+	p2 = subprocess.Popen(shlex.split("python interaction_manager.py --ip " + ip + " --port 9559 --sysip 127.0.0.1 --mode \"" + strategy + "\" --sgroups \"type\" --L1 \"German\" --L2 \"English\" --concepts \"../data/study_1/animals_concepts.csv\" --cbindings \"../data/study_1/animals_concept_bindings.csv\" --rnr=30 --gestures=" + str(gestures) + " --gesture_variation=" + str(gesture_variation)))
 
 	time.sleep(2)
 
