@@ -226,8 +226,8 @@ class IntroLesModule(ALModule):
 def main():
     """ Main entry point
     """
-    NAO_IP = '169.254.221.206'
-    #NAO_IP = '192.168.1.242'
+    #NAO_IP = '169.254.221.206'
+    NAO_IP = '192.168.1.60'
     #NAO_IP = '127.0.0.1'
     port = 9559
 
