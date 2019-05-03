@@ -760,6 +760,8 @@ class ALAnimalExperimentService(object):
         self.tts_set_language("Dutch")
 
         self.s.ALMemory.raiseEvent("log", "Child name: " + value)
+        self.s.ALMemory.raiseEvent("ding", "")            
+        self.s.ALMemory.raiseEvent("log", "*ding*")        
 
         # Initialize the robot's position: standing, without animated speech (BodyLanguageMode == 0)
         self.s.ALRobotPosture.goToPosture("Stand", 0.3)
@@ -788,11 +790,6 @@ class ALAnimalExperimentService(object):
         # self.s.ALAudioDevice.setOutputVolume(60)
         # time.sleep(1.5)        
         # self.s.ALMotion.moveTo(0.0, 0.0, -0.75, [["MaxStepFrequency", 0.25]])
-
-
-        self.s.ALMemory.raiseEvent("ding", "")            
-        self.s.ALMemory.raiseEvent("log", "*ding*")
-        time.sleep(1)
 
         # Introduce the game
         intro = ["Hallo "+value+"!",
