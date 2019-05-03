@@ -29,6 +29,8 @@
         }
 
         $(document).ready(function () {
+            var ding_sound = new Audio("ping.wav");
+            
             // connect to Nao
             function disconnected() {
                 console.log("disconnected");
@@ -42,6 +44,21 @@
                             $('#answer').text(result);
                         });
                     });
+
+                    ALMemory.subscriber('round_nr').then(function (sub) {
+                        sub.signal.connect(function (nr) {
+                            console.log("Round number update: " + nr);
+                            $('#round_nr').html(nr);                            
+                        });
+                    });
+
+                    ALMemory.subscriber('ding').then(function (sub) {
+                        sub.signal.connect(function () {
+                            ding_sound.play();
+                        });
+                    });
+
+
                 });
             }, disconnected, ROBOT_IP);
         });
@@ -56,6 +73,7 @@
     <input type="button" id="btn_resume" value="Resume" onclick="resume();" /><br /><br /><br />
     <b>Text for the robot to say:</b><br />
     <input type="text" id="tts_input" /><br />
-    <input type="button" id="btn_send_tts" value="Say it!" onclick="sendTTS();" />
+    <input type="button" id="btn_send_tts" value="Say it!" onclick="sendTTS();" /><br /><br />
+    <b>Round number: </b><span id="round_nr">0</span>
 </body>
 </html>

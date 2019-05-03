@@ -517,6 +517,7 @@ class ALAnimalExperimentService(object):
 
                     if self.gesture_variation and not self.isTestRun:
                         the_gesture = self.target_words[value]["Gestures"][int((self.round_number - 1) / 6)]
+                        self.s.ALMemory.raiseEvent("log", "gesture_performed: " + the_gesture["Id"])
                         print "taking index " + str(int((self.round_number - 1) / 6)) + " for gesture in round " + str(self.round_number)
 
                     self.s.ALTextToSpeech.say('Ik zie ik zie wat jij niet ziet, en het is een')
@@ -556,6 +557,7 @@ class ALAnimalExperimentService(object):
 
                     if self.gesture_variation and not self.isTestRun:
                         the_gesture = self.target_words[value]["Gestures"][int((self.round_number - 1) / 6)]
+                        self.s.ALMemory.raiseEvent("log", "gesture_performed: " + the_gesture["Id"])
                         print "taking index " + str(int((self.round_number - 1) / 6)) + " for gesture in round " + str(self.round_number)
 
                     self.s.ALTextToSpeech.say('Tik maar op de')
@@ -756,6 +758,10 @@ class ALAnimalExperimentService(object):
         self.logger.info("Start introduction")
         print "start intro"
         self.tts_set_language("Dutch")
+
+        self.s.ALMemory.raiseEvent("log", "Child name: " + value)
+        self.s.ALMemory.raiseEvent("ding", "")            
+        self.s.ALMemory.raiseEvent("log", "*ding*")
 
         # Initialize the robot's position: standing, without animated speech (BodyLanguageMode == 0)
         self.s.ALRobotPosture.goToPosture("Stand", 0.3)
