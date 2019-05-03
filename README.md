@@ -48,3 +48,6 @@ In order to add your own concepts, the following steps are needed:
 4. Update the concepts at the top of the animalexperimentservice/app/scripts/myservice.py file
 
 Note: because we did not know how to do language switches fast enough to make it sound fluent, we trigger .wav recordings in English while maintaining the Dutch language setting of the robot. We have since found a better way to do this, which you can find in the OutputManager of the large scale L2TOR study, but have not revised this project yet to implement this update.
+
+# Credits #
+Some of the images used in the pre-test and post-tests are designed by whatwolf, brgfx and Freepik.com.

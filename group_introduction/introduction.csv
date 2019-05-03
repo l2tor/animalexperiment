@@ -1,0 +1,36 @@
+Posture,,Sit
+Press,,
+Dansje,,lookaround
+Posture,,Sit
+Press,,
+Text,Dutch,Hoi allemaal. Leuk om jullie te zien. Ik ben Robin. Dit is de eerste keer dat ik hier ben en ik vind het een beetje spannend
+Press,,
+Text,Dutch,Als ik dingen eng vind wil ik dansen. En dan vind ik het minder eng.        Zal ik een dansje gaan doen?
+Press,,
+Text,Dutch,Doen jullie dan wel mee? 
+Press,,
+Text,Dutch,Ik ga hoofd schouders knie en teen doen! Kennen jullie die?
+Dansje,,headshoulderskneestoes
+Press,,
+Posture,,Sit
+Press,,
+Text,Dutch,Dat was leuk! Nu durf ik wel een handje te geven
+Press,,
+Move,,Handje
+Press,,
+Posture,,Sit
+Press,,
+Text,Dutch,Zal ik nog een dansje gaan doen?
+Press,,
+Text,Dutch,Doen jullie dan wel mee? 
+Press,,
+Text,Dutch,Daar gaan we dan!
+Dansje,,hansjepansje
+Press,,
+Posture,,Crouch
+Press,,
+Text,Dutch,Ik ben een beetje moe. Ik ga nu rusten. Doei allemaal en tot snel! 
+Move,,waving
+Posture,,Crouch
+Posture,,LyingBack
+End,,

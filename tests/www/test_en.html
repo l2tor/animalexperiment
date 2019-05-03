@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Untitled Document</title>
+<script src="jquery.min.js"></script>
+<script type="text/javascript">
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+savelog = function(text){
+
+$.ajax({
+  type:"POST",
+  data:"logcontent="+text,//+"\r\n", 
+  url: "server.php",
+  success: function(data){
+
+  //alert('Written in Log File');
+}
+}); // END Ajax 
+};
+
+var wav = ['wav/bridge.wav', 'wav/horse.wav', 'wav/pencil.wav', 'wav/spoon.wav', 'wav/stairs.wav', 'wav/turtle.wav'];
+var picture_type = 0;
+var correct = {
+	'bridge': 0,
+	'horse': 0,
+	'pencil': 0,
+	'spoon': 0,
+	'stairs': 0,
+	'turtle': 0
+};
+
+random_wav = shuffle(wav.slice(0));
+
+var images = ['images/bridge.png', 'images/horse.png', 'images/pencil.png', 'images/spoon.png', 'images/stairs.png', 'images/turtle.png'];
+var images_photo = ['images/bridge_photo.jpg', 'images/horse_photo.jpg', 'images/pencil_photo.jpg', 'images/spoon_photo.jpg', 'images/stairs_photo.jpg', 'images/turtle_photo.jpg'];
+var images_outline = ['images/bridge_outline.png', 'images/horse_outline.png', 'images/pencil_outline.png', 'images/spoon_outline.png', 'images/stairs_outline.png', 'images/turtle_outline.png'];
+
+function randomize(){
+
+	if (picture_type == 0) {
+		random_images = shuffle(images.slice(0));
+	}
+	else if (picture_type == 1) {
+		random_images = shuffle(images_photo.slice(0));		
+	}
+	else {
+		random_images = shuffle(images_outline.slice(0));				
+	}
+
+	
+	console.log(images);
+	console.log(random_images.toString());
+
+	img1 = random_images.pop();
+	img2 = random_images.pop();
+	img3 = random_images.pop();
+	img4 = random_images.pop();
+	img5 = random_images.pop();
+	img6 = random_images.pop();
+	
+	$("#img1").attr("src",img1);
+	$("#img2").attr("src",img2);
+	$("#img3").attr("src",img3);
+	$("#img4").attr("src",img4);
+	$("#img5").attr("src",img5);
+	$("#img6").attr("src",img6);
+	
+	$("#topleft").hide();
+	$("#topmid").hide();
+	$("#topright").hide();
+	$("#bottomleft").hide();
+	$("#bottommid").hide();
+	$("#bottomright").hide();
+	
+	setTimeout(function(){$("#topleft").show();}, 2200);
+	setTimeout(function(){$("#topmid").show();}, 2200);	
+	setTimeout(function(){$("#topright").show();}, 2200);	
+	setTimeout(function(){$("#bottomleft").show();}, 2200);	
+	setTimeout(function(){$("#bottommid").show();}, 2200);	
+	setTimeout(function(){$("#bottomright").show();}, 2200);
+		
+	setTimeout(function(){start_time = new Date();}, 2200);	
+		
+};
+
+function pop_wav(){
+	if(random_wav.length == 0){
+		picture_type++;
+
+		if (picture_type == 3) {
+			var correctstr = "";
+
+			for (var key in correct) {
+				if (correct[key] >= 2) {
+					numCorrect++;
+				}
+				correctstr += key + ": " + correct[key] + "/3 correct, ";
+			}
+			savelog('========== English test finished: ' + numCorrect + '/6 correct.');
+			savelog(correctstr);
+			setTimeout(function() {
+				window.location.replace("/done_test_en.html");	
+			}, 500);			
+		}
+		else {
+			random_wav = shuffle(wav.slice(0));
+			sound = random_wav.pop();
+			return sound;			
+		}
+	}
+	else{
+		sound = random_wav.pop();
+		return sound;
+	}
+};
+
+function elapsed_time(){
+	start = start_time.getTime();
+	end_time = new Date();
+	end = end_time.getTime();
+	TOT = end - start;
+	return TOT.toString();
+};
+
+function imageclicked(obj) {
+	savelog("Answer: " + nameFromImage(obj.src) + ", Time on task: " + elapsed_time()); 
+
+	if (nameFromWav(sound) == nameFromImage(obj.src))
+		correct[nameFromWav(sound)]++;
+		//numCorrect++;
+
+	sound = pop_wav(); 
+	audio = new Audio(sound); 
+	current_wav = audio; 
+	randomize(); 
+	setTimeout(function(){current_wav.play()}, 1000); 
+	truth_check=true;
+	round++;
+	setTimeout(function() {
+		savelog('Round ' + round + ' - ' + nameFromWav(sound));
+	}, 500);
+}
+
+function nameFromWav(filename) {
+	return filename.replace('wav/', '').replace('.wav', '');
+}
+
+function nameFromImage(filename) {
+	return filename.replace('http://localhost:8000/images/', '').replace('_photo', '').replace('_outline', '').replace('.png', '').replace('.jpg', '');
+}
+
+
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+var start_time = new Date();
+
+var sound = pop_wav();
+
+var audio = new Audio(sound);
+
+var current_wav = audio;
+
+var truth_check = true;
+
+var round = 1;
+
+var numCorrect = 0;
+
+randomize(images);
+
+savelog('========== English test started.');
+
+setTimeout(function() {
+	savelog('Round ' + round + ' - ' + nameFromWav(sound));
+}, 500);
+
+
+setTimeout(function(){document.getElementById("container").removeAttribute("style")}, 2700); 
+setTimeout(function(){current_wav.play()}, 1500);
+
+document.onkeypress = function(evt) {
+    evt = evt || window.event;
+    var charCode = evt.keyCode || evt.which;
+
+    if (charCode == 82 || charCode == 114) { // 'r'
+		if (truth_check == true) {
+			current_wav.play();
+		}; 
+
+		truth_check=false;    	
+    }
+};
+
+</script>
+
+<style type="text/css">
+body{
+	cursor: url('images/cursor.png'), default;
+	//background-image: url(images/darkgreen_bg.png);
+	background-color: #339900;
+	cursor: url('images/cursor.png'), default;
+	user-select: none;
+	margin: 0px;	
+}
+.all{
+	width: 100%; 
+	height: 100%;
+	cursor: url('images/cursor.png'), default;
+}
+.column-left, .column-right, .column-center { 
+	display: flex;
+	justify-content: center;
+	float: left; 
+	width: 33%; 
+	text-align: center;
+	height: 48%;
+}
+.playsound {
+	text-align: center;
+	margin: 10px;
+	padding: 10px;
+}
+.whitespace {
+	text-align: center;
+	margin: 20px;
+	/*padding: 10px;*/
+	box-sizing: border-box;
+	width: 80%;
+	height: 93%;
+	background-color: #ddd;
+}
+
+#img1, #img2, #img3, #img4, #img5, #img6 {
+	height: 100%;
+}
+
+html, body, .all, #container {
+	height: 100%;
+	width: 100%;
+}
+
+.all, #container {
+	float: left;
+}
+</style></head>
+
+<body>
+<div class="all">
+<!--<div class="playsound" id="sound"><img id="playbutton" src="images/play_up.png" width="100" height="100" onmousedown="if (truth_check == true){current_wav.play();}; truth_check=false;" onmouseover="this.src='images/play_down.png';" onmouseout="this.src='images/play_up.png';"/></div>
+<div> </div>-->
+<div class="container" id="container" style="display:none">
+  <div class="column-left">
+  	<div class="whitespace" id="topleft" onmousedown="imageclicked($(this).find('img')[0])"></div>
+	<script>
+    		$('<img id="img1" src="' + img1 + '">').appendTo('#topleft');
+		</script>
+  </div>
+  <div class="column-center">
+  	<div class="whitespace" id="topmid" onmousedown="imageclicked($(this).find('img')[0])"></div>
+	  <script>
+	    		$('<img id="img2" src="' + img2 + '">').appendTo('#topmid');
+	  </script>
+  </div>
+  <div class="column-right">
+  	<div class="whitespace" id="topright" onmousedown="imageclicked($(this).find('img')[0])"></div>
+	<script>
+    		$('<img id="img3" src="' + img3 + '">').appendTo('#topright');
+		</script></div>
+  <div class="column-left">
+  	<div class="whitespace" id="bottomleft" onmousedown="imageclicked($(this).find('img')[0])"></div>
+	<script>
+    		$('<img id="img4" src="' + img4 + '">').appendTo('#bottomleft');
+		</script></div>
+  <div class="column-center">
+  	<div class="whitespace" id="bottommid" onmousedown="imageclicked($(this).find('img')[0])"></div>
+	<script>
+    		$('<img id="img5" src="' + img5 + '">').appendTo('#bottommid');
+		</script></div>
+  <div class="column-right">
+  	<div class="whitespace" id="bottomright" onmousedown="imageclicked($(this).find('img')[0])"></div>
+	<script>
+    		$('<img id="img6" src="' + img6 + '">').appendTo('#bottomright');
+		</script></div>
+</div>
+</div>
+</body>
+</html>
