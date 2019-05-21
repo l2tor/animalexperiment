@@ -4,4 +4,4 @@ if NOT "%ERRORLEVEL%"=="0" (
   start ..\php\php.exe -S localhost:8000
 )
 
-"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" http://localhost:8000/start_test_en.html
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" http://localhost:8000/start_test_en_posttest.html
