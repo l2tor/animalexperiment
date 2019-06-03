@@ -562,7 +562,7 @@ class ALAnimalExperimentService(object):
 
                     self.s.ALTextToSpeech.say('Tik maar op de')
 
-                    if the_gesture["Id"] == 'VariationGestures/Turtle3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
+                    if the_gesture["Id"] == 'VariationGestures/Bridge3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
                         self.s.ALMotion.moveTo(0.0, 0.0, 1.0, [["MaxStepFrequency", 0.25]])                   
 
                     self.s.ALBehaviorManager.startBehavior(the_gesture["Id"])        
@@ -572,7 +572,7 @@ class ALAnimalExperimentService(object):
                     self.s.ALAudioDevice.setOutputVolume(60)
                     time.sleep(the_gesture["Pause_after"])              
 
-                    if the_gesture["Id"] == 'VariationGestures/Turtle3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
+                    if the_gesture["Id"] == 'VariationGestures/Bridge3' or the_gesture["Id"] == 'VariationGestures/Turtle5':
                         self.s.ALMotion.moveTo(0.0, 0.0, -0.75, [["MaxStepFrequency", 0.25]])                           
 
                     # self.s.ALAnimatedSpeech.say("Tik maar op de " + self.target_words[value]['AnimatedSpeechTag'] + ".")
